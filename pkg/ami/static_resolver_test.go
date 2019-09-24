@@ -96,12 +96,12 @@ var _ = Describe("AMI Static Resolution", func() {
 			ExpectedAMI:  "ami-049574de1981b69dc",
 			ExpectError:  false,
 		}),
-		Entry("with gpu (g4dn) instance and us-east-1", ResolveCase{
-			Region:       "us-east-1",
-			Version:      "1.14",
+		Entry("with gpu (g4) instance and eu-west-1", ResolveCase{
+			Region:       "eu-west-1",
+			Version:      "1.12",
 			InstanceType: "g4dn.xlarge",
 			ImageFamily:  "AmazonLinux2",
-			ExpectedAMI:  "ami-06191d186b526c958",
+			ExpectedAMI:  "ami-049574de1981b69dc",
 			ExpectError:  false,
 		}),
 		Entry("with gpu (p3) instance and non-existent region", ResolveCase{
