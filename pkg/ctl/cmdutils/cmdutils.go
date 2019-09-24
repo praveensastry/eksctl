@@ -120,6 +120,23 @@ func AddNameFlag(fs *pflag.FlagSet, meta *api.ClusterMeta) {
 	fs.StringVarP(&meta.Name, "name", "n", "", "EKS cluster name")
 }
 
+// AddClusterFlag adds common --cluster flag for cluster name
+// as well as a deprecated --name flag
+func AddClusterFlag(fs *pflag.FlagSet, meta *api.ClusterMeta) {
+	fs.StringVarP(&meta.Name, "cluster", "c", "", "EKS cluster name")
+	fs.StringVarP(&meta.Name, "name", "n", "", "EKS cluster name")
+	_ = fs.MarkDeprecated("name", "use --cluster")
+}
+
+// ClusterNameFlag returns the flag to use for the cluster name
+// taking the principal resource into account.
+func ClusterNameFlag(cmd *Cmd) string {
+	if cmd.CobraCommand.Use == "cluster" {
+		return "--name"
+	}
+	return "--cluster"
+}
+
 // AddRegionFlag adds common --region flag
 func AddRegionFlag(fs *pflag.FlagSet, p *api.ProviderConfig) {
 	fs.StringVarP(&p.Region, "region", "r", "", "AWS region")
@@ -163,9 +180,10 @@ func ErrUnsupportedRegion(provider *api.ProviderConfig) error {
 	return fmt.Errorf("--region=%s is not supported - use one of: %s", provider.Region, strings.Join(api.SupportedRegions(), ", "))
 }
 
-// ErrNameFlagAndArg is a common error message
-func ErrNameFlagAndArg(nameFlag, nameArg string) error {
-	return ErrFlagAndArg("--name", nameFlag, nameArg)
+// ErrClusterFlagAndArg wraps ErrFlagAndArg() by passing in the
+// proper flag name.
+func ErrClusterFlagAndArg(cmd *Cmd, nameFlag, nameArg string) error {
+	return ErrFlagAndArg(ClusterNameFlag(cmd),  nameFlag, nameArg)
 }
 
 // ErrFlagAndArg may be used to err for options that can be given

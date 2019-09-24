@@ -84,7 +84,7 @@ func enableProfileCmd(cmd *cmdutils.Cmd) {
 
 func doEnableProfile(cmd *cmdutils.Cmd, opts options) error {
 	if cmd.NameArg != "" && opts.quickstartNameArg != "" {
-		return cmdutils.ErrNameFlagAndArg(cmd.NameArg, opts.quickstartNameArg)
+		return cmdutils.ErrClusterFlagAndArg(cmd, cmd.NameArg, opts.quickstartNameArg)
 	}
 	if cmd.NameArg != "" {
 		opts.quickstartNameArg = cmd.NameArg

@@ -48,7 +48,7 @@ func doGetCluster(cmd *cmdutils.Cmd, params *getCmdParams, listAllRegions bool) 
 	}
 
 	if cfg.Metadata.Name != "" && cmd.NameArg != "" {
-		return cmdutils.ErrNameFlagAndArg(cfg.Metadata.Name, cmd.NameArg)
+		return cmdutils.ErrClusterFlagAndArg(cmd, cfg.Metadata.Name, cmd.NameArg)
 	}
 
 	if cmd.NameArg != "" {

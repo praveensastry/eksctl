@@ -33,7 +33,7 @@ func createIAMIdentityMappingCmd(cmd *cmdutils.Cmd) {
 		fs.StringVar(&id.RoleARN, "role", "", "ARN of the IAM role to create")
 		fs.StringVar(&id.Username, "username", "", "User name within Kubernetes to map to IAM role")
 		fs.StringArrayVar(&id.Groups, "group", []string{}, "Group within Kubernetes to which IAM role is mapped")
-		cmdutils.AddNameFlag(fs, cfg.Metadata)
+		cmdutils.AddClusterFlag(fs, cfg.Metadata)
 		cmdutils.AddRegionFlag(fs, cmd.ProviderConfig)
 		cmdutils.AddConfigFileFlag(fs, &cmd.ClusterConfigFile)
 		cmdutils.AddTimeoutFlag(fs, &cmd.ProviderConfig.WaitTimeout)
@@ -62,7 +62,7 @@ func doCreateIAMIdentityMapping(cmd *cmdutils.Cmd, id *authconfigmap.MapRole) er
 		return cmdutils.ErrMustBeSet("--role")
 	}
 	if cfg.Metadata.Name == "" {
-		return cmdutils.ErrMustBeSet("--name")
+		return cmdutils.ErrMustBeSet("--cluster")
 	}
 	if err := id.Valid(); err != nil {
 		return err

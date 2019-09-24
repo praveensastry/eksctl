@@ -69,7 +69,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"write-kubeconfig",
 						"--verbose", "4",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--kubeconfig", kubeconfigPath,
 					)
 					Expect(cmd).To(RunSuccessfully())
@@ -291,7 +291,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("should plan to enable two of the types using flags", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"update-cluster-logging",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--enable-types", "api,controllerManager",
 					)
 					Expect(cmd).To(RunSuccessfully())
@@ -305,7 +305,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("should enable two of the types using flags", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"update-cluster-logging",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--approve",
 						"--enable-types", "api,controllerManager",
 					)
@@ -322,7 +322,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("should enable all of the types with --enable-types=all", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"update-cluster-logging",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--approve",
 						"--enable-types", "all",
 					)
@@ -337,7 +337,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("should enable all but one type", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"update-cluster-logging",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--approve",
 						"--enable-types", "all",
 						"--disable-types", "controllerManager",
@@ -355,7 +355,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("should disable all but one type", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"update-cluster-logging",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--approve",
 						"--disable-types", "all",
 						"--enable-types", "controllerManager",
@@ -373,7 +373,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("should disable all of the types with --disable-types=all", func() {
 					cmd := eksctlUtilsCmd.WithArgs(
 						"update-cluster-logging",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--approve",
 						"--disable-types", "all",
 					)
@@ -418,7 +418,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 
 					setupCmd := eksctlUtilsCmd.WithArgs(
 						"associate-iam-oidc-provider",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--approve",
 					)
 					Expect(setupCmd).To(RunSuccessfully())
@@ -694,7 +694,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("fails getting unknown mapping", func() {
 					cmd := eksctlGetCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", "idontexist",
 						"-o", "yaml",
 					)
@@ -703,7 +703,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("creates mapping", func() {
 					createCmd := eksctlCreateCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role0.RoleARN,
 						"--username", role0.Username,
 						"--group", role0.Groups[0],
@@ -713,7 +713,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 
 					getCmd := eksctlGetCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role0.RoleARN,
 						"-o", "yaml",
 					)
@@ -722,7 +722,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("creates a duplicate mapping", func() {
 					createCmd := eksctlCreateCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role0.RoleARN,
 						"--username", role0.Username,
 						"--group", role0.Groups[0],
@@ -732,7 +732,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 
 					getCmd := eksctlGetCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role0.RoleARN,
 						"-o", "yaml",
 					)
@@ -741,7 +741,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("creates a duplicate mapping with different identity", func() {
 					createCmd := eksctlCreateCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role1.RoleARN,
 						"--group", role1.Groups[0],
 					)
@@ -749,7 +749,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 
 					getCmd := eksctlGetCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role1.RoleARN,
 						"-o", "yaml",
 					)
@@ -758,14 +758,14 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("deletes a single mapping fifo", func() {
 					deleteCmd := eksctlDeleteCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role,
 					)
 					Expect(deleteCmd).To(RunSuccessfully())
 
 					getCmd := eksctlGetCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role,
 						"-o", "yaml",
 					)
@@ -774,7 +774,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("fails when deleting unknown mapping", func() {
 					deleteCmd := eksctlDeleteCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", "idontexist",
 					)
 					Expect(deleteCmd).ToNot(RunSuccessfully())
@@ -782,7 +782,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 				It("deletes duplicate mappings with --all", func() {
 					deleteCmd := eksctlDeleteCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role,
 						"--all",
 					)
@@ -790,7 +790,7 @@ var _ = Describe("(Integration) Create, Get, Scale & Delete", func() {
 
 					getCmd := eksctlGetCmd.WithArgs(
 						"iamidentitymapping",
-						"--name", clusterName,
+						"--cluster", clusterName,
 						"--role", role,
 						"-o", "yaml",
 					)
